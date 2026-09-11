@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Descargar proyecto
         uses: actions/checkout@v4
 
@@ -25,11 +26,17 @@ jobs:
         with:
           gradle-version: '8.7'
 
+      - name: Preparar proyecto Android
+        run: |
+          unzip -q BLIND_Android_Phone_V1.0.zip -d android-project
+
       - name: Compilar APK
-        run: gradle assembleDebug
+        working-directory: android-project/blind-android
+        run: |
+          gradle assembleDebug
 
       - name: Guardar APK
         uses: actions/upload-artifact@v4
         with:
-          name: BLIND-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: BLIND-APK
+          path: android-project/blind-android/app/build/outputs/apk/debug/app-debug.apk
